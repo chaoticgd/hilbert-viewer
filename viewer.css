@@ -1,0 +1,51 @@
+body {
+	background: #000;
+	margin: 0;
+	color: #ccc;
+	font-family: Arial;
+}
+
+aside, canvas {
+	position: absolute;
+	top: 0;
+	height: 100%;
+}
+aside {
+	left: 0;
+	width: 25%;
+	background: #111;
+	padding: 8px;
+}
+canvas {
+	left: 25%;
+	width: 75%;
+}
+
+#toggle-aside {
+	position: absolute;
+	left: 0;
+	top: 0;	
+}
+#toggle-aside::after {
+	content: '\2261';
+}
+aside.hidden {
+	display: none;
+}
+
+h1, h2 {
+	font-weight: normal;
+}
+h1 {
+	font-size: 22px;
+}
+h2 {
+	font-size: 18px;
+	text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+	aside {
+		width: 100%;
+	}
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>hilbert-viewer</title>
+		<link rel="stylesheet" href="viewer.css">
+		<script src="viewer.js"></script>
+	</head>
+	<body>
+		<aside>
+			<h1>Hilbert Viewer</h1>
+			<noscript>
+				<p>
+					Enable Javascript!
+				</p>
+			</noscript>
+			<section>
+				<h2>File Management</h2>
+				<button id="open-file-button">
+					Open File
+				</button>
+				<p>
+					Note: Images opened will not be sent over the network.
+				</p>
+			</section>
+			<section>
+				<h2>Clicked Region</h2>
+				<p>
+					Base Offset: <span id="clicked-base-offset">(no selection)</span>
+				</p>
+				<p>LSB Strings:</p>
+				<ul id="clicked-lsbstrings-list"></ul>
+			</section>
+		</aside>
+		<canvas id="viewport">
+		</canvas>
+		<button id="toggle-aside"></button>
+	</body>
+</html>
