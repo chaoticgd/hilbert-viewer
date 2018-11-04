@@ -58,7 +58,7 @@ window.addEventListener('load', function() {
 	var dataContext = dataCanvas.getContext('2d');
 
 	var image = new Image();
-	var highlightedPoint = { x: -1, y: -1 };
+	var highlightedPoint = undefined;
 	const padding = 32;
 
 	function openImage(event) {
@@ -128,6 +128,11 @@ window.addEventListener('load', function() {
 
 		context.drawImage(image, rect.x, rect.y, rect.width, rect.height);
 
+		if(highlightedPoint == undefined) {
+			return;
+		}
+
+		// Draw highlighted point crosshair.
 		var layers = [
 			{ colour: '#fff', width: 3 },
 			{ colour: '#f00', width: 1 }
@@ -222,4 +227,8 @@ window.addEventListener('load', function() {
 		var offset = parseInt(prompt('Enter offset (use \'0x\' for hex):'));
 		highlightedPoint = d2xy(image.width, offset);
 	});
+
+	connect('clear-highlight-button', function() {
+		highlightedPoint = undefined;
+	})
 });
