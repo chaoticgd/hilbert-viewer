@@ -196,7 +196,7 @@ window.addEventListener('load', function() {
 		document.getElementById('clicked-offset-hex').innerText = baseOffset.toString(16);
 	});
 
-	connect('find-offset-button', function() {
+	connect('goto-offset-button', function() {
 		var offset = parseInt(prompt('Enter offset (use \'0x\' for hex):'));
 		highlightedPoint = d2xy(image.width, offset);
 	});
