@@ -36,7 +36,7 @@ window.addEventListener('load', function() {
 	var dataContext = dataCanvas.getContext('2d');
 
 	var image = new Image();
-	var imagePixelArray;
+	var highlightedPoint = { x: -1, y: -1 };
 	const padding = 32;
 
 	function openImage(event) {
@@ -80,6 +80,14 @@ window.addEventListener('load', function() {
 		};
 	}
 
+	function imagePointToCanvas(imagePoint) {
+		var rect = getImageRectangle();
+		return {
+			x: rect.x + imagePoint.x * rect.width / image.width,
+			y: rect.y + imagePoint.y * rect.height / image.height
+		};
+	}
+
 	function draw() {
 		canvas.width = Math.max(canvas.clientWidth, canvas.innerWidth || 0);
 		canvas.height = Math.max(canvas.clientHeight, canvas.innerHeight || 0);
@@ -97,6 +105,37 @@ window.addEventListener('load', function() {
 		context.stroke();
 
 		context.drawImage(image, rect.x, rect.y, rect.width, rect.height);
+
+		var layers = [
+			{ colour: '#fff', width: 3 },
+			{ colour: '#f00', width: 1 }
+		];
+
+		for(var i in layers) {
+			function moveTo(x, y) {
+				var canvasPoint = imagePointToCanvas({ x: x, y: y });
+				context.moveTo(canvasPoint.x, canvasPoint.y);
+			}
+
+			function lineTo(x, y) {
+				var canvasPoint = imagePointToCanvas({ x: x, y: y });
+				context.lineTo(canvasPoint.x, canvasPoint.y);
+			}
+
+			var layer = layers[i];
+			context.strokeStyle = layer.colour;
+			context.lineWidth = layer.width;
+
+			context.beginPath();
+			moveTo(0, highlightedPoint.y);
+			lineTo(image.width, highlightedPoint.y);
+			context.stroke();
+
+			context.beginPath();
+			moveTo(highlightedPoint.x, 0);
+			lineTo(highlightedPoint.x, image.height);
+			context.stroke();
+		}
 	}
 
 	window.setInterval(draw, 1000 / 30);
@@ -126,8 +165,8 @@ window.addEventListener('load', function() {
 	function comparePixels(a, b) {
 		var result = true;
 
-		// Chop off the LSB.
 		for(var i = 0; i < 3; i++) {
+			// Chop off the LSB.
 			a[i] &= 254;
 			b[i] &= 254;
 
@@ -155,5 +194,10 @@ window.addEventListener('load', function() {
 		var baseOffset = ++d;
 		document.getElementById('clicked-offset').innerText = baseOffset;
 		document.getElementById('clicked-offset-hex').innerText = baseOffset.toString(16);
+	});
+
+	connect('find-offset-button', function() {
+		var offset = parseInt(prompt('Enter offset (use \'0x\' for hex):'));
+		highlightedPoint = d2xy(image.width, offset);
 	});
 });

@@ -1,6 +1,8 @@
 // Converted to Javascript from https://en.wikipedia.org/wiki/Hilbert_curve
 
 function xy2d(n, x, y) {
+	y = n - y;
+
 	var rx, ry, s, d = 0;
 	for(s = n / 2; s > 0; s /= 2) {
 		rx = (x & s) > 0;
@@ -26,7 +28,7 @@ function d2xy(n, d) {
 		y += s * ry;
 		t /= 4;
 	}
-	return { x: x, y: y };
+	return { x: x, y: n - y };
 }
 
 function rot(n, x, y, rx, ry) {
