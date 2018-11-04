@@ -21,13 +21,10 @@ canvas {
 	width: 75%;
 }
 
-#toggle-aside {
+#button-box {
 	position: absolute;
 	left: 0;
-	top: 0;	
-}
-#toggle-aside::after {
-	content: '\2261';
+	top: 0;
 }
 aside.hidden {
 	display: none;
@@ -38,6 +35,7 @@ h1, h2 {
 }
 h1 {
 	font-size: 22px;
+	padding-top: 16px;
 }
 h2 {
 	font-size: 18px;

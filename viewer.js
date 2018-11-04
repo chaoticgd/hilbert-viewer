@@ -1,11 +1,27 @@
+function connect(id, callback) {
+	document.getElementById(id).addEventListener('click', callback);
+}
+
 window.addEventListener('load', function() {
 	var aside = document.getElementsByTagName('aside')[0];
-	document.getElementById('toggle-aside').addEventListener('click', function() {
+	connect('toggle-aside', function() {
 		if(aside.className == '') {
 			aside.className = 'hidden';
 		} else {
 			aside.className = '';
 		}
+	});
+
+	var zoom = 1;
+
+	connect('zoom-in', function() {
+		zoom *= 1.25;
+	});
+	connect('zoom-out', function() {
+		zoom /= 1.25;
+	});
+	connect('zoom-fit', function() {
+		zoom = 1;
 	});
 
 	var canvas = document.getElementById('viewport');
@@ -37,12 +53,27 @@ window.addEventListener('load', function() {
 			imageSize.x = canvas.width - 2 * padding;
 		}
 
-		context.drawImage(
-			image,
-			canvas.width / 2 - imageSize.x / 2,
-			canvas.height / 2 - imageSize.y / 2,
-			imageSize.x,
-			imageSize.y);
+		imageSize.x *= zoom;
+		imageSize.y *= zoom;
+
+		var rect = {
+			x: canvas.width / 2 - imageSize.x / 2,
+			y: canvas.height / 2 - imageSize.y / 2,
+			width: imageSize.x,
+			height: imageSize.y
+		};
+
+		context.beginPath();
+		context.moveTo(rect.x, rect.y);
+		context.lineTo(rect.x, rect.y + rect.height);
+		context.lineTo(rect.x + rect.width, rect.y + rect.height);
+		context.lineTo(rect.x + rect.width, rect.y);
+		context.lineTo(rect.x, rect.y);
+
+		context.strokeStyle = '#aaa';
+		context.stroke();
+
+		context.drawImage(image, rect.x, rect.y, rect.width, rect.height);
 	}
 
 	window.setInterval(draw, 1000 / 30);
