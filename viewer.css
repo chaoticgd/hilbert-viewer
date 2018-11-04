@@ -42,6 +42,18 @@ h2 {
 	text-decoration: underline;
 }
 
+a {
+	color: inherit;
+}
+.base-subscript {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
 @media (max-width: 600px) {
 	aside {
 		width: 100%;

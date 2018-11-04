@@ -4,8 +4,9 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		<title>hilbert-viewer</title>
+		<title>Hilbert Viewer</title>
 		<link rel="stylesheet" href="viewer.css">
+		<script src="hilbert.js"></script>
 		<script src="viewer.js"></script>
 	</head>
 	<body>
@@ -20,28 +21,34 @@
 				<h2>File Management</h2>
 				<input type="file" id="open-file-button">
 				<p>
-					Input files are images where different colours represent different data segments.
+					Input files are images where different colours represent different data segments. Any colour change represents a new segment except when only the least significant bit is changed, which can be used to store metadata.
 				</p>
 				<p>
 					Note: Images opened will not be sent over the network.
 				</p>
 			</section>
 			<section>
-				<h2>Status</h2>
-				<p>Cursor (Image): (<span id="cursor-x-image">?</span>, <span id="cursor-y-image">?</span>)</p>
-				<p>Cursor (x, y &isin; [0, 1]): (<span id="cursor-x">?</span>, <span id="cursor-y">?</span>)</p>
+				<h2>Cursor</h2>
+				<p>Position (Image): (<span id="cursor-x-image">?</span>, <span id="cursor-y-image">?</span>)</p>
+				<p>Position (x, y &isin; [0, 1]): (<span id="cursor-x">?</span>, <span id="cursor-y">?</span>)</p>
+				<p>Offset: <span id="cursor-offset">?</span><span class="base-subscript">&#8321;&#8320;</span> / 0x<span id="cursor-offset-hex">?</span><span class="base-subscript">&#x2081;&#x2086;</span></p>
 			</section>
 			<section>
 				<h2>Clicked Region</h2>
 				<p>
 					Base Offset: <span id="clicked-base-offset">(no selection)</span>
 				</p>
-				<p>LSB Strings:</p>
-				<ul id="clicked-lsbstrings-list"></ul>
+				<p>LSB strings:</p>
+				<ul>
+					<li>(r&#8321;, g&#8321;, b&#8321;, r&#8322;, ...): &quot;<span id="clicked-string-b"></span>&quot;</li>
+					<li>(r&#8321;, r&#8322;, ..): &quot;<span id="clicked-string-b"></span>&quot;</li>
+					<li>(g&#8321;, g&#8322;, ..): &quot;<span id="clicked-string-b"></span>&quot;</li>
+					<li>(b&#8321;, b&#8322;, ..): &quot;<span id="clicked-string-b"></span>&quot;</li>
+				</ul>
 			</section>
 			<section>
 				<h2>About</h2>
-				<p>Takes an image file that contains the Hilbert curve representation of a binary file, and displays metadata about the clicked segment.</p>
+				<p>Algorithm: <a href="https://en.wikipedia.org/wiki/Hilbert_curve">https://en.wikipedia.org/wiki/Hilbert_curve</a></p>
 				<p>License: MIT</p>
 				<p>Author: chaoticgd</p>
 			</section>
