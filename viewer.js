@@ -31,15 +31,30 @@ window.addEventListener('load', function() {
 	var canvas = document.getElementById('viewport');
 	var context = canvas.getContext('2d');
 
+	// Used to retrieve pixel data only. 
+	var dataCanvas = document.getElementById('data-canvas');
+	var dataContext = dataCanvas.getContext('2d');
+
 	var image = new Image();
+	var imagePixelArray;
 	const padding = 32;
 
 	function openImage(event) {
 		var reader = new FileReader();
 		reader.addEventListener('load', function(event) {
+			image.addEventListener('load', function() {
+				dataCanvas.width = image.width;
+				dataCanvas.height = image.height;
+	
+				dataContext.drawImage(image, 0, 0);
+			});
 			image.src = event.target.result;
 		});
 		reader.readAsDataURL(event.target.files[0]);
+	}
+
+	function pixelAt(x, y) {
+		return dataContext.getImageData(x, y, 1, 1).data;
 	}
 
 	document.getElementById('open-file-button').addEventListener('change', openImage);
@@ -96,20 +111,49 @@ window.addEventListener('load', function() {
 	}
 
 	canvas.addEventListener('mousemove', function(event) {
-		var cursorPosition = toImageSpace(event);
+		var imagePosition = toImageSpace(event);
 
-		document.getElementById('cursor-x-image').innerText = Math.floor(cursorPosition.x);
-		document.getElementById('cursor-y-image').innerText = Math.floor(cursorPosition.y);
-		document.getElementById('cursor-x').innerText = Math.floor(1000 * cursorPosition.x / image.width) / 1000;
-		document.getElementById('cursor-y').innerText = Math.floor(1000 * cursorPosition.y / image.height) / 1000;
+		document.getElementById('cursor-x-image').innerText = Math.floor(imagePosition.x);
+		document.getElementById('cursor-y-image').innerText = Math.floor(imagePosition.y);
+		document.getElementById('cursor-x').innerText = Math.floor(1000 * imagePosition.x / image.width) / 1000;
+		document.getElementById('cursor-y').innerText = Math.floor(1000 * imagePosition.y / image.height) / 1000;
 
-		var offset = xy2d(image.width, cursorPosition.x, cursorPosition.y);
+		var offset = xy2d(image.width, imagePosition.x, imagePosition.y);
 		document.getElementById('cursor-offset').innerText = offset;
 		document.getElementById('cursor-offset-hex').innerText = offset.toString(16);
 	});
 
-	canvas.addEventListener('mouseclick', function(event) {
-		var cursorPosition = toImageSpace(event);
+	function comparePixels(a, b) {
+		var result = true;
 
+		// Chop off the LSB.
+		for(var i = 0; i < 3; i++) {
+			a[i] &= 254;
+			b[i] &= 254;
+
+			if(a[i] != b[i]) {
+				result = false;
+			}
+		}
+
+		return result;
+	}
+
+	canvas.addEventListener('click', function(event) {
+		var imagePosition = toImageSpace(event);
+
+		// Find the start of the segment.
+		var sourcePixel = pixelAt(imagePosition.x, imagePosition.y);
+		var currentPixel;
+		var d = xy2d(image.width, imagePosition.x, imagePosition.y)
+
+		do {
+			var pos = d2xy(image.width, --d);
+			currentPixel = pixelAt(pos.x, pos.y);
+		} while(comparePixels(currentPixel, sourcePixel));
+
+		var baseOffset = ++d;
+		document.getElementById('clicked-offset').innerText = baseOffset;
+		document.getElementById('clicked-offset-hex').innerText = baseOffset.toString(16);
 	});
 });

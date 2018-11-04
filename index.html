@@ -36,15 +36,15 @@
 			<section>
 				<h2>Clicked Region</h2>
 				<p>
-					Base Offset: <span id="clicked-base-offset">(no selection)</span>
+					Base Offset: <span id="clicked-offset">?</span><span class="base-subscript">&#8321;&#8320;</span> / 0x<span id="clicked-offset-hex">?</span><span class="base-subscript">&#x2081;&#x2086;</span>
 				</p>
-				<p>LSB strings (null-terminated, max 256 chars):</p>
+				<!--<p>LSB strings (null-terminated, max 256 chars):</p>
 				<ul>
 					<li>(r&#8321;, g&#8321;, b&#8321;, r&#8322;, ...): &quot;<span id="clicked-string-b"></span>&quot;</li>
 					<li>(r&#8321;, r&#8322;, ..): &quot;<span id="clicked-string-b"></span>&quot;</li>
 					<li>(g&#8321;, g&#8322;, ..): &quot;<span id="clicked-string-b"></span>&quot;</li>
 					<li>(b&#8321;, b&#8322;, ..): &quot;<span id="clicked-string-b"></span>&quot;</li>
-				</ul>
+				</ul>-->
 			</section>
 			<section>
 				<h2>About</h2>
@@ -61,5 +61,7 @@
 			<button id="zoom-out">-</button>
 			<button id="zoom-fit">Fit</button>
 		</div>
+		<canvas id="data-canvas">
+		</canvas>
 	</body>
 </html>
