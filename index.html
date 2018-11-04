@@ -18,9 +18,10 @@
 			</noscript>
 			<section>
 				<h2>File Management</h2>
-				<button id="open-file-button">
-					Open File
-				</button>
+				<input type="file" id="open-file-button">
+				<p>
+					Input files are images where different colours represent different data segments.
+				</p>
 				<p>
 					Note: Images opened will not be sent over the network.
 				</p>
@@ -32,6 +33,12 @@
 				</p>
 				<p>LSB Strings:</p>
 				<ul id="clicked-lsbstrings-list"></ul>
+			</section>
+			<section>
+				<h2>About</h2>
+				<p>Takes an image file that contains the Hilbert curve representation of a binary file, and displays metadata about the clicked segment.</p>
+				<p>License: MIT</p>
+				<p>Author: chaoticgd</p>
 			</section>
 		</aside>
 		<canvas id="viewport">
