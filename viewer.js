@@ -34,8 +34,6 @@ window.addEventListener('load', function() {
 	var image = new Image();
 	const padding = 32;
 
-	var cursorPosition = { x: 0, y: 0 };
-
 	function openImage(event) {
 		var reader = new FileReader();
 		reader.addEventListener('load', function(event) {
@@ -88,11 +86,17 @@ window.addEventListener('load', function() {
 
 	window.setInterval(draw, 1000 / 30);
 
-	canvas.addEventListener('mousemove', function(event) {
+	// Convert coordinates from a MouseClick event to a point on the image. 
+	function toImageSpace(event) {
 		var rect = getImageRectangle();
+		return {
+			x: clamp(((event.offsetX - rect.x) * image.width) / rect.width, 0, image.width),
+			y: clamp(((event.offsetY - rect.y) * image.height) / rect.height, 0, image.height)
+		};
+	}
 
-		cursorPosition.x = clamp(((event.offsetX - rect.x) * image.width) / rect.width, 0, image.width);
-		cursorPosition.y = clamp(((event.offsetY - rect.y) * image.height) / rect.height, 0, image.height);
+	canvas.addEventListener('mousemove', function(event) {
+		var cursorPosition = toImageSpace(event);
 
 		document.getElementById('cursor-x-image').innerText = Math.floor(cursorPosition.x);
 		document.getElementById('cursor-y-image').innerText = Math.floor(cursorPosition.y);
@@ -102,5 +106,10 @@ window.addEventListener('load', function() {
 		var offset = xy2d(image.width, cursorPosition.x, cursorPosition.y);
 		document.getElementById('cursor-offset').innerText = offset;
 		document.getElementById('cursor-offset-hex').innerText = offset.toString(16);
+	});
+
+	canvas.addEventListener('mouseclick', function(event) {
+		var cursorPosition = toImageSpace(event);
+
 	});
 });
