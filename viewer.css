@@ -38,6 +38,12 @@ aside {
 	background: #111;
 	padding: 8px;
 }
+@media (max-width: 600px) {
+	aside {
+		width: 100%;
+	}
+}
+
 canvas {
 	left: 25%;
 	width: 75%;
@@ -70,6 +76,17 @@ h2 {
 a {
 	color: inherit;
 }
+
+label[for=direction-right-button] img {
+	transform: rotateZ(90deg);
+}
+label[for=direction-down-button] img {
+	transform: rotateZ(180deg);
+}
+label[for=direction-left-button] img {
+	transform: rotateZ(270deg);
+}
+
 .base-subscript {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -77,10 +94,4 @@ a {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-}
-
-@media (max-width: 600px) {
-	aside {
-		width: 100%;
-	}
 }

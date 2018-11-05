@@ -22,6 +22,13 @@
 
 // Converted to Javascript from https://en.wikipedia.org/wiki/Hilbert_curve
 
+const Direction = {
+	up: 0,
+	right: 1,
+	down: 2,
+	left: 3
+};
+
 function xy2d(n, x, y) {
 	y = n - y;
 
