@@ -135,7 +135,7 @@ window.addEventListener('load', function() {
 		// Draw highlighted point crosshair.
 		var layers = [
 			{ colour: '#fff', width: 3 },
-			{ colour: '#f00', width: 1 }
+			{ colour: '#000', width: 1 }
 		];
 
 		for(var i in layers) {
@@ -221,6 +221,8 @@ window.addEventListener('load', function() {
 		var baseOffset = ++d;
 		document.getElementById('clicked-offset').innerText = baseOffset;
 		document.getElementById('clicked-offset-hex').innerText = baseOffset.toString(16);
+
+		highlightedPoint = d2xy(image.width, baseOffset);
 	});
 
 	connect('goto-offset-button', function() {
