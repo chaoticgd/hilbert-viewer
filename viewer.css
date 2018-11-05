@@ -34,21 +34,27 @@ aside, canvas {
 }
 aside {
 	left: 0;
-	width: 25%;
+	width: 100%;
 	background: #111;
 	padding: 8px;
 	overflow-y: scroll;
 }
-@media (max-width: 600px) {
+canvas {
+	left: 0;
+	width: 100%;
+	transition: 0.1s;
+}
+@media (min-width: 600px) {
 	aside {
-		width: 100%;
+		width: 25%;
+	}
+
+	aside:not(.hidden) ~ canvas {
+		left: 25%;
+		width: 75%;
 	}
 }
 
-canvas {
-	left: 25%;
-	width: 75%;
-}
 #data-canvas {
 	display: none;
 }
