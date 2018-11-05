@@ -28,7 +28,7 @@ body {
 }
 
 aside, canvas {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	height: 100%;
 }
@@ -37,6 +37,7 @@ aside {
 	width: 25%;
 	background: #111;
 	padding: 8px;
+	overflow-y: scroll;
 }
 @media (max-width: 600px) {
 	aside {
