@@ -48,6 +48,10 @@ window.addEventListener('load', function() {
 	});
 
 	var zoom = 1;
+	var mouseDownPanPosition = { x: 0, y: 0 };
+	var mouseDownCursorPosition = { x: 0, y: 0 };
+	var isPanning = false;
+	var panPosition = { x: 0, y: 0 };
 
 	connect('zoom-in', function() {
 		zoom *= 1.25;
@@ -62,7 +66,7 @@ window.addEventListener('load', function() {
 	var canvas = document.getElementById('viewport');
 	var context = canvas.getContext('2d');
 
-	// Used to retrieve pixel data only. 
+	// Used to retrieve pixel data only.
 	var dataCanvas = document.getElementById('data-canvas');
 	var dataContext = dataCanvas.getContext('2d');
 
@@ -77,12 +81,14 @@ window.addEventListener('load', function() {
 			image.addEventListener('load', function() {
 				dataCanvas.width = image.width;
 				dataCanvas.height = image.height;
-	
+
 				dataContext.drawImage(image, 0, 0);
 
 				var maxOffset = image.width * image.height - 1;
 				document.getElementById('max-offset').innerText = maxOffset;
 				document.getElementById('max-offset-hex').innerText = maxOffset.toString(16);
+
+				draw();
 			});
 			image.src = event.target.result;
 		});
@@ -109,8 +115,8 @@ window.addEventListener('load', function() {
 		imageSize.y *= zoom;
 
 		return {
-			x: canvas.width / 2 - imageSize.x / 2,
-			y: canvas.height / 2 - imageSize.y / 2,
+			x: canvas.width / 2 - imageSize.x / 2 - panPosition.x,
+			y: canvas.height / 2 - imageSize.y / 2 - panPosition.y,
 			width: imageSize.x,
 			height: imageSize.y
 		};
@@ -179,9 +185,7 @@ window.addEventListener('load', function() {
 		}
 	}
 
-	window.setInterval(draw, 1000 / 10);
-
-	// Convert coordinates from a MouseClick event to a point on the image. 
+	// Convert coordinates from a MouseClick event to a point on the image.
 	function toImageSpace(event) {
 		var rect = getImageRectangle();
 		return {
@@ -201,6 +205,25 @@ window.addEventListener('load', function() {
 		var offset = xy2d(image.width, imagePosition, orientation);
 		document.getElementById('cursor-offset').innerText = offset;
 		document.getElementById('cursor-offset-hex').innerText = offset.toString(16);
+
+		if(isPanning) {
+			panPosition.x = mouseDownPanPosition.x + (mouseDownCursorPosition.x - event.clientX);
+			panPosition.y = mouseDownPanPosition.y + (mouseDownCursorPosition.y - event.clientY);
+		}
+
+		draw();
+	});
+
+	canvas.addEventListener('mousedown', function(event) {
+		if(event.ctrlKey) {
+			mouseDownPanPosition = panPosition;
+			mouseDownCursorPosition = { x: event.clientX, y: event.clientY };
+			isPanning = true;
+		}
+	});
+
+	canvas.addEventListener('mouseup', function(event) {
+		isPanning = false;
 	});
 
 	function comparePixels(a, b) {
@@ -237,15 +260,21 @@ window.addEventListener('load', function() {
 		document.getElementById('clicked-offset-hex').innerText = baseOffset.toString(16);
 
 		highlightedPoint = d2xy(image.width, baseOffset, orientation);
+
+		draw();
 	});
 
 	connect('goto-offset-button', function() {
 		var offset = parseInt(prompt('Enter offset (use \'0x\' for hex):'));
 		highlightedPoint = d2xy(image.width, offset, orientation);
+
+		draw();
 	});
 
 	connect('clear-highlight-button', function() {
 		highlightedPoint = undefined;
+
+		draw();
 	})
 
 	function changeOrientation(selectedElement) {
@@ -258,4 +287,6 @@ window.addEventListener('load', function() {
 
 	connectRadio('orientation', changeOrientation);
 	changeOrientation(document.querySelector('input[name=orientation]:checked'));
+
+	draw();
 });
