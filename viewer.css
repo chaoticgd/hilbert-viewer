@@ -27,7 +27,7 @@ body {
 	font-family: Arial;
 }
 
-aside, canvas {
+aside, canvas, #help {
 	position: fixed;
 	top: 0;
 	height: 100%;
@@ -39,20 +39,38 @@ aside {
 	padding: 8px;
 	overflow-y: scroll;
 }
-canvas {
+canvas, #help {
 	left: 0;
 	width: 100%;
 	transition: 0.1s;
+}
+#help {
+	display: none;
+	background: rgba(0, 0, 0, 0.9);
+	overflow-y: scroll;
+}
+#help section {
+	max-width: 768px;
+	margin: 0 auto;
+	padding: 16px;
+}
+#help.shown {
+	display: block;
 }
 @media (min-width: 600px) {
 	aside {
 		width: 25%;
 	}
 
-	aside:not(.hidden) ~ canvas {
+	aside:not(.hidden) ~ canvas,
+	aside:not(.hidden) ~ #help {
 		left: 25%;
 		width: 75%;
 	}
+}
+#help img {
+	display: block;
+	margin: 0 auto;
 }
 
 #data-canvas {

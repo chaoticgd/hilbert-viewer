@@ -20,16 +20,7 @@
 			<section>
 				<h2>File Management</h2>
 				<input type="file" id="open-file-button">
-				<p>
-					Input files are images where different colours represent different data segments. Any colour change represents a new segment except when only the least significant bit is changed, which can be used to store metadata.
-				</p>
-				<p>
-					Note: Images opened will not be sent over the network.
-				</p>
 				<p>Maximum Offset: <span id="max-offset">?</span><span class="base-subscript">&#8321;&#8320;</span> / 0x<span id="max-offset-hex">?</span><span class="base-subscript">&#x2081;&#x2086;</span></p>
-			</section>
-			<section>
-				<h2>File Format</h2>
 				<p>
 					Orientation:
 					<br>
@@ -70,24 +61,82 @@
 					<li>(b&#8321;, b&#8322;, ..): &quot;<span id="clicked-string-b"></span>&quot;</li>
 				</ul>-->
 			</section>
-			<section>
-				<h2>About</h2>
-				<p>Algorithm: <a href="https://en.wikipedia.org/wiki/Hilbert_curve">https://en.wikipedia.org/wiki/Hilbert_curve</a></p>
-				<p>License: <a href="LICENSE" target="_blank">MIT</a></p>
-				<p>Author: chaoticgd</p>
-				<p>Version: 0.3</p>
-				<p>GitHub: <a href="https://github.com/chaoticgd/hilbert-viewer">https://github.com/chaoticgd/hilbert-viewer</a></p>
-			</section>
 		</aside>
 		<canvas id="viewport">
 		</canvas>
 		<div id="button-box">
 			<button id="toggle-aside">&Congruent;</button>
+			<button id="toggle-help">?</button>
 			<button id="zoom-in">+</button>
 			<button id="zoom-out">-</button>
 			<button id="zoom-fit">Fit</button>
 		</div>
 		<canvas id="data-canvas">
 		</canvas>
+		<div id="help">
+			<section>
+				<h2>
+					About
+				</h2>
+				<p>
+					A Hilbert curve is a space-filling curve that allows a dataset of one dimensionality to be mapped to a dataset of a different dimensionality in a way that preserves grouping. For example, bytes in a file could be mapped onto a 2-dimensional image. This means that it is useful for visualising large binary files such as disk images.
+				</p>
+				<p>
+					This program allows you to view data that has already been mapped onto a Hilbert curve and convert between image coordinates and the underlying 1-dimensional offset. It is specifically tailored for input files where certain data segmnets have been highlighted different colours.
+				</p>
+				<p>
+					The <a href="https://en.wikipedia.org/wiki/Hilbert_curve">main algorithm used</a> to implement this program was found on Wikipedia.
+				</p>
+				<p>License: <a href="LICENSE" target="_blank">MIT</a></p>
+				<p>Author: chaoticgd</p>
+				<p>Version: 0.3</p>
+				<p>GitHub: <a href="https://github.com/chaoticgd/hilbert-viewer">https://github.com/chaoticgd/hilbert-viewer</a></p>
+			</section>
+			<section>
+				<h2>
+					File Management
+				</h2>
+				<p>
+					Input files are images representing data that has been mapped onto a Hilbert curve in the following format:
+				</p>
+				<img src="file-format.svg" alt="Diagram of the file format of an input image.">
+				<p>
+					Each data segment should be colour coded. For example, a disk image may have an executable segment and a data segment. The executable segment could be coloured red and the data segment could be coloured blue.
+				</p>
+				<p>
+					The position of the filled dot in which the offset is equal to zero (the origin) can be changed by selecting a different orientation.
+				</p>
+				<p>
+					Note: Images opened will not be sent over the network.
+				</p>
+			</section>
+			<section>
+				<h2>
+					Actions
+				</h2>
+				<p>
+					The 'Goto Offset' function allows you to highlight the position of where a certain offset is represented in the image.
+				</p>
+				<p>
+					The 'Clear Highlight' function allows you to stop a position from being highlighted.
+				</p>
+			</section>
+			<section>
+				<h2>
+					Cursor
+				</h2>
+				<p>
+					This section displays information about the pixel under the current cursor.
+				</p>
+			</section>
+			<section>
+				<h2>
+					Clicked Region
+				</h2>
+				<p>
+					The 'Base Offset' line shows the offset of the beginning of the colour coded segment that was clicked.
+				</p>
+			</section>
+		</div>
 	</body>
 </html>

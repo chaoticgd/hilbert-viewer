@@ -47,6 +47,15 @@ window.addEventListener('load', function() {
 		}
 	});
 
+	var help = document.getElementById('help');
+	connect('toggle-help', function() {
+		if(help.className == '') {
+			help.className = 'shown';
+		} else {
+			help.className = '';
+		}
+	});
+
 	var zoom = 1;
 	var mouseDownPanPosition = { x: 0, y: 0 };
 	var mouseDownCursorPosition = { x: 0, y: 0 };
@@ -87,8 +96,6 @@ window.addEventListener('load', function() {
 				var maxOffset = image.width * image.height - 1;
 				document.getElementById('max-offset').innerText = maxOffset;
 				document.getElementById('max-offset-hex').innerText = maxOffset.toString(16);
-
-				draw();
 			});
 			image.src = event.target.result;
 		});
@@ -185,6 +192,8 @@ window.addEventListener('load', function() {
 		}
 	}
 
+	window.setInterval(draw, 1000 / 10);
+
 	// Convert coordinates from a MouseClick event to a point on the image.
 	function toImageSpace(event) {
 		var rect = getImageRectangle();
@@ -209,9 +218,9 @@ window.addEventListener('load', function() {
 		if(isPanning) {
 			panPosition.x = mouseDownPanPosition.x + (mouseDownCursorPosition.x - event.clientX);
 			panPosition.y = mouseDownPanPosition.y + (mouseDownCursorPosition.y - event.clientY);
-		}
 
-		draw();
+			draw();
+		}
 	});
 
 	canvas.addEventListener('mousedown', function(event) {
@@ -260,21 +269,15 @@ window.addEventListener('load', function() {
 		document.getElementById('clicked-offset-hex').innerText = baseOffset.toString(16);
 
 		highlightedPoint = d2xy(image.width, baseOffset, orientation);
-
-		draw();
 	});
 
 	connect('goto-offset-button', function() {
 		var offset = parseInt(prompt('Enter offset (use \'0x\' for hex):'));
 		highlightedPoint = d2xy(image.width, offset, orientation);
-
-		draw();
 	});
 
 	connect('clear-highlight-button', function() {
 		highlightedPoint = undefined;
-
-		draw();
 	})
 
 	function changeOrientation(selectedElement) {
@@ -287,6 +290,4 @@ window.addEventListener('load', function() {
 
 	connectRadio('orientation', changeOrientation);
 	changeOrientation(document.querySelector('input[name=orientation]:checked'));
-
-	draw();
 });
