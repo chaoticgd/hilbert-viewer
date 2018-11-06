@@ -38,6 +38,7 @@ aside {
 	background: #111;
 	padding: 8px;
 	overflow-y: scroll;
+	z-index: 1;
 }
 canvas, #help {
 	left: 0;
@@ -81,6 +82,7 @@ canvas, #help {
 	position: absolute;
 	left: 0;
 	top: 0;
+	z-index: 2;
 }
 aside.hidden {
 	display: none;
