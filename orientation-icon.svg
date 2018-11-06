@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   id="svg8"
-   version="1.1"
-   viewBox="0 0 5.2916667 5.2916667"
+   width="20"
    height="20"
-   width="20">
+   viewBox="0 0 5.2916667 5.2916667"
+   version="1.1"
+   id="svg8">
   <defs
      id="defs2" />
   <metadata
@@ -25,11 +25,18 @@
     </rdf:RDF>
   </metadata>
   <g
-     transform="translate(0,-291.70831)"
-     id="layer1">
+     style="stroke:#faffff;stroke-opacity:1"
+     id="layer1"
+     transform="translate(0,-291.70831)">
     <path
-       id="path817"
+       style="fill:none;fill-rule:evenodd;stroke:#faffff;stroke-width:0.265;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
        d="m 1.0583334,292.76664 h 1.0583333 v 1.05834 H 1.0583334 v 2.11666 h 1.0583333 v -1.05833 h 1.0583334 v 1.05833 h 1.0583333 v -2.11666 H 3.1750001 v -1.05834 h 1.0583333"
-       style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.265;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+       id="path817" />
   </g>
+  <circle
+     r="0.19828139"
+     cy="0.39687499"
+     cx="3.96875"
+     id="path828"
+     style="opacity:1;fill:none;fill-opacity:1;stroke:#dfdfdf;stroke-width:0.3971872;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
 </svg>

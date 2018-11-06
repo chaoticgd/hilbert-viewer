@@ -20,32 +20,98 @@
 	SOFTWARE.
 */
 
-// Converted to Javascript from https://en.wikipedia.org/wiki/Hilbert_curve
-
-const Direction = {
-	up: 0,
-	right: 1,
-	down: 2,
-	left: 3
+const Orientation = {
+	down: 0,
+	left: 1,
+	up: 2,
+	right: 3,
+	downFlipped: 4,
+	leftFlipped: 5,
+	upFlipped: 6,
+	rightFlipped: 7
 };
 
-function xy2d(n, x, y) {
-	y = n - y;
+function rot90cc(n, point) {
+	return {
+		x: n / 2 - (point.y - n / 2),
+		y: n / 2 + (point.x - n / 2)
+	}
+}
+
+function flipX(n, point) {
+	point.x = n - point.x;
+	return point;
+}
+
+function flipY(n, point) {
+	point.y = n - point.y;
+	return point;
+}
+
+function rotatePoint(n, point, orientation) {
+	switch(orientation) {
+		case Orientation.down:
+			return point;
+		case Orientation.left:
+			return rot90cc(n, point);
+		case Orientation.up:
+			return rot90cc(n, rot90cc(n, point));
+		case Orientation.right:
+			return rot90cc(n, rot90cc(n, rot90cc(n, point)));
+		
+		case Orientation.downFlipped:
+			return flipX(n, point);
+		case Orientation.leftFlipped:
+			return flipY(n, rot90cc(n, rot90cc(n, rot90cc(n, point))));
+		case Orientation.upFlipped:
+			return flipX(n, rot90cc(n, rot90cc(n, point)));
+		case Orientation.rightFlipped:
+			return flipY(n, rot90cc(n, point));
+	}
+
+	throw 'Invalid orientation: ' + orientation;
+}
+
+function rotatePointBack(n, point, orientation) {
+	switch(orientation) {
+		case Orientation.down:
+			return point;
+		case Orientation.left:
+			return rot90cc(n, rot90cc(n, rot90cc(n, point)));
+		case Orientation.up:
+			return rot90cc(n, rot90cc(n, point));
+		case Orientation.right:
+			return rot90cc(n, point);
+		
+		case Orientation.downFlipped:
+			return flipX(n, point);
+		case Orientation.leftFlipped:
+			return rot90cc(n, flipY(n, point));
+		case Orientation.upFlipped:
+			return rot90cc(n, rot90cc(n, flipX(n, point)));
+		case Orientation.rightFlipped:
+			return rot90cc(n, rot90cc(n, rot90cc(n, flipY(n, point))));
+	}
+
+	throw 'Invalid orientation: ' + orientation;
+}
+
+function xy2d(n, point, orientation) {
+	point.y = n - point.y;
+	point = rotatePoint(n, point, orientation);
 
 	var rx, ry, s, d = 0;
 	for(s = n / 2; s > 0; s /= 2) {
-		rx = (x & s) > 0;
-		ry = (y & s) > 0;
+		rx = (point.x & s) > 0;
+		ry = (point.y & s) > 0;
 		d += s * s * ((3 * rx) ^ ry);
 		
-		var result = rot(s, x, y, rx, ry);
-		x = result.x;
-		y = result.y;
+		point = rot(s, point.x, point.y, rx, ry);
 	}
 	return d;
 }
 
-function d2xy(n, d) {
+function d2xy(n, d, orientation) {
 	var rx, ry, s, t = d, x = 0, y = 0;
 	for(s = 1; s < n; s *= 2) {
 		rx = 1 & (t / 2);
@@ -57,7 +123,9 @@ function d2xy(n, d) {
 		y += s * ry;
 		t /= 4;
 	}
-	return { x: x, y: n - y };
+
+	var result = rotatePointBack(n, { x: x, y: y }, orientation);
+	return { x: result.x, y: n - result.y };
 }
 
 function rot(n, x, y, rx, ry) {

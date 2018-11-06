@@ -84,14 +84,27 @@ a {
 	color: inherit;
 }
 
-label[for=direction-right-button] img {
-	transform: rotateZ(90deg);
-}
-label[for=direction-down-button] img {
+label[for=orientation-down-button] img {
 	transform: rotateZ(180deg);
 }
-label[for=direction-left-button] img {
+label[for=orientation-left-button] img {
 	transform: rotateZ(270deg);
+}
+label[for=orientation-right-button] img {
+	transform: rotateZ(90deg);
+}
+
+label[for=orientation-downFlipped-button] img {
+	transform: rotateZ(180deg) rotateY(180deg);
+}
+label[for=orientation-leftFlipped-button] img {
+	transform: rotateZ(270deg) rotateY(180deg);
+}
+label[for=orientation-upFlipped-button] img {
+	transform: rotateY(180deg);
+}
+label[for=orientation-rightFlipped-button] img {
+	transform: rotateZ(90deg) rotateY(180deg);
 }
 
 .base-subscript {

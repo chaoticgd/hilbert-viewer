@@ -24,6 +24,15 @@ function connect(id, callback) {
 	document.getElementById(id).addEventListener('click', callback);
 }
 
+function connectRadio(name, callback) {
+	var elements = document.getElementsByName(name);
+	for(var i = 0; i < elements.length; i++) {
+		elements[i].addEventListener('change', function(event) {
+			callback(event.target);
+		});
+	}
+}
+
 function clamp(val, lower, upper) {
 	return Math.max(Math.min(val, upper), lower);
 }
@@ -59,6 +68,7 @@ window.addEventListener('load', function() {
 
 	var image = new Image();
 	var highlightedPoint = undefined;
+	var orientation = Orientation.up;
 	const padding = 32;
 
 	function openImage(event) {
@@ -69,6 +79,10 @@ window.addEventListener('load', function() {
 				dataCanvas.height = image.height;
 	
 				dataContext.drawImage(image, 0, 0);
+
+				var maxOffset = image.width * image.height - 1;
+				document.getElementById('max-offset').innerText = maxOffset;
+				document.getElementById('max-offset-hex').innerText = maxOffset.toString(16);
 			});
 			image.src = event.target.result;
 		});
@@ -165,7 +179,7 @@ window.addEventListener('load', function() {
 		}
 	}
 
-	window.setInterval(draw, 1000 / 30);
+	window.setInterval(draw, 1000 / 10);
 
 	// Convert coordinates from a MouseClick event to a point on the image. 
 	function toImageSpace(event) {
@@ -184,7 +198,7 @@ window.addEventListener('load', function() {
 		document.getElementById('cursor-x').innerText = Math.floor(1000 * imagePosition.x / image.width) / 1000;
 		document.getElementById('cursor-y').innerText = Math.floor(1000 * imagePosition.y / image.height) / 1000;
 
-		var offset = xy2d(image.width, imagePosition.x, imagePosition.y);
+		var offset = xy2d(image.width, imagePosition, orientation);
 		document.getElementById('cursor-offset').innerText = offset;
 		document.getElementById('cursor-offset-hex').innerText = offset.toString(16);
 	});
@@ -211,10 +225,10 @@ window.addEventListener('load', function() {
 		// Find the start of the segment.
 		var sourcePixel = pixelAt(imagePosition.x, imagePosition.y);
 		var currentPixel;
-		var d = xy2d(image.width, imagePosition.x, imagePosition.y)
+		var d = xy2d(image.width, imagePosition, orientation)
 
 		do {
-			var pos = d2xy(image.width, --d);
+			var pos = d2xy(image.width, --d, orientation);
 			currentPixel = pixelAt(pos.x, pos.y);
 		} while(comparePixels(currentPixel, sourcePixel));
 
@@ -222,15 +236,26 @@ window.addEventListener('load', function() {
 		document.getElementById('clicked-offset').innerText = baseOffset;
 		document.getElementById('clicked-offset-hex').innerText = baseOffset.toString(16);
 
-		highlightedPoint = d2xy(image.width, baseOffset);
+		highlightedPoint = d2xy(image.width, baseOffset, orientation);
 	});
 
 	connect('goto-offset-button', function() {
 		var offset = parseInt(prompt('Enter offset (use \'0x\' for hex):'));
-		highlightedPoint = d2xy(image.width, offset);
+		highlightedPoint = d2xy(image.width, offset, orientation);
 	});
 
 	connect('clear-highlight-button', function() {
 		highlightedPoint = undefined;
 	})
+
+	function changeOrientation(selectedElement) {
+		if(selectedElement == null) {
+			return;
+		}
+
+		orientation = Orientation[selectedElement.id.replace('orientation-', '').replace('-button', '')];
+	}
+
+	connectRadio('orientation', changeOrientation);
+	changeOrientation(document.querySelector('input[name=orientation]:checked'));
 });
